@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ST LMD L1 Semester Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+    }
+    table {
+        border-collapse: collapse;
+        margin: auto;
+        background: white;
+        width: 90%;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background: #2c3e50;
+        color: white;
+    }
+    input {
+        width: 70px;
+        padding: 4px;
+        text-align: center;
+    }
+    .btn {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 25px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .result {
+        text-align: center;
+        font-size: 20px;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+    .details {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 16px;
+    }
+    .pass { color: green; }
+    .fail { color: red; }
+</style>
+</head>
+<body>
+
+<h1>ST LMD L1 Semester Calculator</h1>
+
+<table>
+<thead>
+<tr>
+    <th>Module</th>
+    <th>Coef</th>
+    <th>Exam (60%)</th>
+    <th>TD (40%)</th>
+    <th>Final (Direct)</th>
+</tr>
+</thead>
+<tbody>
+
+<tr><td>Déontologique</td><td>1</td><td></td><td></td><td><input id="deon"></td></tr>
+<tr><td>Chimie</td><td>3</td><td><input id="chim_e"></td><td><input id="chim_td"></td><td></td></tr>
+<tr><td>Analysis</td><td>3</td><td><input id="ana_e"></td><td><input id="ana_td"></td><td></td></tr>
+<tr><td>Algèbre</td><td>2</td><td><input id="alg_e"></td><td><input id="alg_td"></td><td></td></tr>
+<tr><td>Informatique</td><td>2</td><td></td><td></td><td><input id="info"></td></tr>
+<tr><td>MST</td><td>1</td><td></td><td></td><td><input id="mst"></td></tr>
+<tr><td>Mechanic</td><td>3</td><td><input id="mech_e"></td><td><input id="mech_td"></td><td></td></tr>
+<tr><td>TP Chimie</td><td>1</td><td></td><td></td><td><input id="tp_chim"></td></tr>
+<tr><td>TP Mechanic</td><td>1</td><td></td><td></td><td><input id="tp_mech"></td></tr>
+
+</tbody>
+</table>
+
+<button class="btn" onclick="calculate()">Calculate Semester</button>
+
+<div class="result" id="output"></div>
+<div class="details" id="details"></div>
+
+<script>
+function val(id) {
+    let v = document.getElementById(id).value;
+    if (v === "") return 0;
+    v = parseFloat(v);
+    if (isNaN(v) || v < 0 || v > 20) {
+        alert("All grades must be numbers between 0 and 20");
+        throw "Invalid input";
+    }
+    return v;
+}
+
+function calculate() {
+    try {
+        // 60/40 module grades
+        let chim = 0.6 * val("chim_e") + 0.4 * val("chim_td");
+        let ana  = 0.6 * val("ana_e")  + 0.4 * val("ana_td");
+        let alg  = 0.6 * val("alg_e")  + 0.4 * val("alg_td");
+        let mech = 0.6 * val("mech_e") + 0.4 * val("mech_td");
+
+        // Semester sum
+        let sum =
+            1 * val("deon") +
+            3 * chim +
+            3 * ana +
+            2 * alg +
+            2 * val("info") +
+            1 * val("mst") +
+            3 * mech +
+            1 * val("tp_chim") +
+            1 * val("tp_mech");
+
+        let average = sum / 17;
+        let status = average >= 10 ? "PASSED ✅" : "FAILED ❌";
+        let cls = average >= 10 ? "pass" : "fail";
+
+        document.getElementById("output").innerHTML =
+            `Semester Average: ${average.toFixed(2)} / 20<br>
+             <span class="${cls}">${status}</span>`;
+
+        document.getElementById("details").innerHTML =
+            `<strong>60/40 Module Grades:</strong><br>
+             Chimie: ${chim.toFixed(2)}<br>
+             Analysis: ${ana.toFixed(2)}<br>
+             Algèbre: ${alg.toFixed(2)}<br>
+             Mechanic: ${mech.toFixed(2)}`;
+
+    } catch (e) {}
+}
+</script>
+
+</body>
+</html>
